@@ -1,0 +1,60 @@
+{% extends './base.html' %}
+{% block title %}
+<title>Online Food</title>
+{% endblock title %}
+
+{% block header %}
+<div class="jumbotron">
+    <div class="container text-center">
+      <h1 style="color:orange;">Blah Blah Hotel</h1>      
+    </div>
+  </div>
+  
+  <nav class="navbar navbar-inverse">
+    <div class="container-fluid" style="background-color: rgb(255, 150, 100);">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>                        
+        </button>
+        <a class="navbar-brand" href="#">Logo</a>
+      </div>
+      <div class="collapse navbar-collapse" id="myNavbar" color="yellow">
+        <ul class="nav navbar-nav">
+          <li class="active"><a href="#">Home</a></li>
+          {% if user.is_superuser %}
+            <li><a href="#">Admin</a></li>
+          {% endif %}
+          {% if user.is_authenticated %}
+            <li><a href="#">Profile</a></li>
+          {% endif %}
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            {% if user.is_authenticated %}
+            <li><a href="#"><span class="glyphicon glyphicon-user"></span>Log Out</a></li>
+            {% else %}
+            <li><a href="#"><span class="glyphicon glyphicon-user"></span>Log In</a></li>
+            <li><a href="{% url 'signup_choice' %}"><span class="glyphicon glyphicon-user"></span>Sign Up</a></li>
+            {% endif %}
+          <li><a href="#"><span class="glyphicon glyphicon-shopping-cart"></span>Profile</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+{% endblock header %}
+{% block content %}
+
+{% endblock content %}
+{% block script %}
+{% load static %}
+<script>
+    var CSRF_TOKEN = '{{ csrf_token }}';
+    var URL = "{% url 'home' %}"
+</script>
+<script src={% static 'search.js' %}></script>
+{% endblock script %}
+
+
+
+

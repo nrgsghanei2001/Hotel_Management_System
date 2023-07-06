@@ -25,10 +25,10 @@
         </ul>
         <ul class="nav navbar-nav navbar-right">
           {% if user.is_authenticated %}
-          <li><a href="#"><span class="glyphicon glyphicon-user"></span>Log Out</a></li>
-          {% else %}
-          <li><a href="#"><span class="glyphicon glyphicon-user"></span>Log In</a></li>
-          <li><a href="{% url 'sign_up' %}"><span class="glyphicon glyphicon-user"></span>Sign Up</a></li>
+            <li><a href={% url 'logout' %}><span class="glyphicon glyphicon-user"></span>Log Out</a></li>
+            {% else %}
+            <li><a href={% url 'login' %}><span class="glyphicon glyphicon-user"></span>Log In</a></li>
+            <li><a href="{% url 'sign_up' %}"><span class="glyphicon glyphicon-user"></span>Sign Up</a></li>
           {% endif %}
       </ul>
       </div>

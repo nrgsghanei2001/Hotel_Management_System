@@ -30,3 +30,15 @@ def sign_up(request):
             return render(request, 'accounts/sign_up.html', context)
 
     return render(request, 'accounts/sign_up.html', {})
+
+
+def profile(request):
+    try:
+        guest = Guest.objects.get(user=request.user)
+        staff = 'no'
+    except:
+        guest = Staff.objects.get(user=request.user)
+        staff = 'yes'
+    context = {'guest':guest,
+    'staff':staff,}
+    return render(request, 'accounts/profile.html', context)

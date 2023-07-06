@@ -42,3 +42,5 @@ def profile(request):
     context = {'guest':guest,
     'staff':staff,}
     return render(request, 'accounts/profile.html', context)
+
+

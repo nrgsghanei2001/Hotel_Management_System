@@ -26,10 +26,12 @@
             <div class="row">
               <form method="POST">
                 {% csrf_token %}
-                <label for="text">Search a room here</label>
+                <label for="text">Filters</label>
                 <br>
-                <input id="in_text" type="text" name="text">
-                <button class="btn btn-info" id="search">Search</button>
+                <button class="btn btn-info" id="date">Date</button>
+                <button class="btn btn-info" id="price">Price</button>
+                <button class="btn btn-info" id="capacity">Capacity</button>
+                <button class="btn btn-info" id="status">Status</button>
                 <a href="#"></a>
               </form>
               <br>
@@ -46,6 +48,7 @@
                   <th>Capacity</th>
                   <th>Availability</th>
                   <th>Price Per Night</th>
+                  <th>Reserve</th>
                 </tr>
               </thead>
               <tbody>
@@ -55,6 +58,8 @@
                         <td>{{obj.capacity}}</td>
                         <td>{{obj.availability}}</td>
                         <td>{{obj.price}}</td>
+                        <td><button class="btn btn-info" id="add">Add</button>
+                          <a href="#"></a></td>
                     </tr>
                   {% endfor %}
               </tbody>

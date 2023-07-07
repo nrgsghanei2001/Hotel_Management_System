@@ -21,15 +21,18 @@
       </div>
       <div class="collapse navbar-collapse" id="myNavbar" color="yellow">
         <ul class="nav navbar-nav">
-          <li class="active"><a href="{% url 'home' %}">Home</a></li>
+          <li class="active"><a href="{% url 'home' %}"><span class="glyphicon glyphicon-home"></span>Home</a></li>
           {% if user.is_authenticated %}
-          <li><a href="{% url 'visit_rooms' %}">Visit Rooms</a></li>
+          <li><a href="{% url 'visit_rooms' %}"><span class="glyphicon glyphicon-list-alt"></span>Rooms</a></li>
+          <li><a href="{% url 'service' %}"><span class="glyphicon glyphicon-wrench"></span>Services</a></li>
           {% endif %}
         </ul>
         <ul class="nav navbar-nav navbar-right">
           {% if user.is_authenticated %}
+            <li><a href="#"><span class="glyphicon glyphicon-shopping-cart"></span>My reservations</a></li>
+            <li><a href="#"><span class="	glyphicon glyphicon-usd"></span>Bill</a></li>
             <li><a href={% url 'logout' %}><span class="glyphicon glyphicon-user"></span>Log Out</a></li>
-            {% else %}
+          {% else %}
             <li><a href={% url 'login' %}><span class="glyphicon glyphicon-user"></span>Log In</a></li>
             <li><a href="{% url 'sign_up' %}"><span class="glyphicon glyphicon-user"></span>Sign Up</a></li>
           {% endif %}

@@ -1,5 +1,6 @@
 from django.urls import reverse_lazy
 from django.shortcuts import render, redirect
+from django.http import JsonResponse
 from django.views import generic
 from django.contrib import messages
 from django.contrib.auth.models import User
@@ -44,3 +45,19 @@ def profile(request):
     return render(request, 'accounts/profile.html', context)
 
 
+def add_staff(request):
+    if request.method == 'POST'  and request.is_ajax():
+        text = request.POST
+        username = text['username']
+        email = text['email']
+        password = text['password']
+        role = text['role']
+        role = Role.objects.get(name=role)
+        user2 = User.objects.create(username=username, email=email, password=password)
+        staff = Staff.objects.create(user=user2, email=email, role=role)
+        staff.save()
+        return JsonResponse({"text":text})
+    
+    roles = Role.objects.all()
+    context = {'roles' : roles}
+    return render(request, 'accounts/add_staff.html', context)

@@ -22,6 +22,9 @@
       <div class="collapse navbar-collapse" id="myNavbar" color="yellow">
         <ul class="nav navbar-nav">
           <li class="active"><a href="{% url 'home' %}"><span class="glyphicon glyphicon-home"></span>Home</a></li>
+          {% if user.is_superuser %}
+            <li><a href={% url 'add_staff' %}>Add Staff</a></li>
+          {% endif %}
           {% if user.is_authenticated %}
           <li><a href="{% url 'visit_rooms' %}"><span class="glyphicon glyphicon-list-alt"></span>Rooms</a></li>
           <li><a href="{% url 'service' %}"><span class="glyphicon glyphicon-wrench"></span>Services</a></li>

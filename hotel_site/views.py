@@ -1,10 +1,34 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from hotel.models import Reserves
-
+from accounts.models import *
 
 def home(request):
-    return render(request, 'hotel_site/home.html')
+    try:
+        guest = Guest.objects.get(user=request.user)
+        who = "guest"
+        
+    except:
+        try:
+            staff = Staff.objects.get(user=request.user)
+            if staff.role.name == "manager":
+                who = "manager"
+            elif staff.role.name == "housekeeper":
+                who = "housekeeper"
+            elif staff.role.name == "installer":
+                who = "installer"
+            elif staff.role.name == "receptionist":
+                who = "receptionist"
+            elif staff.role.name == "restaurant staff":
+                who = "restaurant staff"
+            else:
+                who = "no one"
+            
+        except:
+            who = "no one"
+            
+    context = {"who": who}
+    return render(request, 'hotel_site/home.html', context)
 
 
 def sign_up(request):

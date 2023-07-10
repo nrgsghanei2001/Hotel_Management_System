@@ -22,18 +22,35 @@
       <div class="collapse navbar-collapse" id="myNavbar" color="yellow">
         <ul class="nav navbar-nav">
           <li class="active"><a href="{% url 'home' %}"><span class="glyphicon glyphicon-home"></span>Home</a></li>
-          {% if user.is_superuser %}
+          {% if who == "guest" %}
+            <li><a href="{% url 'visit_rooms' %}"><span class="glyphicon glyphicon-list-alt"></span>Rooms</a></li>
+            <li><a href="{% url 'service' %}"><span class="glyphicon glyphicon-wrench"></span>Services</a></li>
+          {% endif %}
+          {% if who == "manager" %}
             <li><a href={% url 'add_staff' %}>Add Staff</a></li>
           {% endif %}
-          {% if user.is_authenticated %}
-          <li><a href="{% url 'visit_rooms' %}"><span class="glyphicon glyphicon-list-alt"></span>Rooms</a></li>
-          <li><a href="{% url 'service' %}"><span class="glyphicon glyphicon-wrench"></span>Services</a></li>
+          {% if who == "housekeeper" %}
+            <h6> house keeper</h6>
+            <li><a href="#"><span class="glyphicon glyphicon-wrench"></span>Housekeeping requests</a></li>
           {% endif %}
+          {% if  who == "installer" %}
+            <h6> installer</h6>
+            <li><a href="#"><span class="glyphicon glyphicon-wrench"></span>Installation requests</a></li>
+          {% endif %}
+          {% if who == "restaurant staff" %}
+            <h6> restaurant staff</h6>
+            <li><a href="#"><span class="glyphicon glyphicon-wrench"></span>Menu</a></li>
+            <li><a href="#"><span class="glyphicon glyphicon-wrench"></span>Food requests</a></li>
+          {% endif %}
+    
+          
         </ul>
         <ul class="nav navbar-nav navbar-right">
-          {% if user.is_authenticated %}
+          {% if who == "guest" %}
             <li><a href="{% url 'my_reservations' %}"><span class="glyphicon glyphicon-shopping-cart"></span>My reservations</a></li>
             <li><a href="#"><span class="	glyphicon glyphicon-usd"></span>Bill</a></li>
+          {% endif %}
+          {% if user.is_authenticated %}
             <li><a href={% url 'logout' %}><span class="glyphicon glyphicon-user"></span>Log Out</a></li>
           {% else %}
             <li><a href={% url 'login' %}><span class="glyphicon glyphicon-user"></span>Log In</a></li>

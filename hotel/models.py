@@ -32,6 +32,7 @@ class calender(models.Model):
 class reserve_item(models.Model):
     room = models.ForeignKey(Room, on_delete=models.CASCADE ,related_name='reserve_item', null=True)
     staying_time = models.ManyToManyField(calender, related_name="reserve_item")
+    total_price = models.FloatField(null=True, blank=True)
 
     def item_name(self):
         return str(self.room.room_number) +" " + " , ".join(f"{s.month}/{s.day}" for s in self.staying_time.all())

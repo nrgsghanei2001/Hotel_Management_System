@@ -15,7 +15,7 @@ class calenderAdmin(admin.ModelAdmin):
 
 @admin.register(reserve_item)
 class reserveItemAdmin(admin.ModelAdmin):
-    list_display = ['room', 'time']
+    list_display = ['room', 'time', 'total_price']
 
     @admin.display(description='staying time')
     def time(self, obj):

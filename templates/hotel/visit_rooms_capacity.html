@@ -23,17 +23,13 @@
             <a class="btn btn-danger" href="{% url 'home' %}">Home</a>
             <br>
             <br>
-            <div class="row">
-              <h2>Filter by</h2>
-              <ul>
-                <li><a href="{% url 'visit_rooms_capacity' %}">Capacity</a></li> 
-                <li><a href="{% url 'visit_rooms_price' %}">Price</a></li> 
-                <li><a href="{% url 'visit_rooms_status' %}">Status</a></li> 
-              </ul>
-            </div>  
+            <a class="btn btn-danger" href="{% url 'visit_rooms' %}">back</a>
+            <br>
+            <br>
+           
  
             <hr>
-            <h2>All Rooms</h2>         
+            <h2>All Rooms Filtered by capacity</h2>         
             <table class="table table-bordered">
               <thead>
                 <tr>

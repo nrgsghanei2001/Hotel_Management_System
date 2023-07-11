@@ -30,3 +30,6 @@ def visit_rooms_status(request):
 
 def service(request):
     return render(request, 'hotel/service.html')
+
+def request_installation(request):
+    return render(request, 'hotel/request_installation.html')

@@ -32,15 +32,17 @@
     </div>
   </div>
 </nav>
-{% endblock header %} {% block content %}
-
-<form method="post" action="{% url 'create_request' %}">
+{% endblock header %} {% block content %} {% for obj in req %}
+<form method="POST" action="{% url 'update_result_ins' %}">
   {% csrf_token %}
-  <label for="description">Description:</label>
+  <label for="description">Results:</label>
   <input type="text" id="description" name="description" required />
-  <input type="submit" value="Submit" />
+  <label for="cost">Cost:</label>
+  <input type="number" id="cost" name="cost" required />
+  <input type="hidden" name="id" value="{{ obj.id }}" />
+  <button type="submit" class="btn btn-info" id="add">Submit</button>
 </form>
-
+{% endfor %}
 <table class="table table-bordered">
   <thead>
     <tr>
@@ -59,7 +61,6 @@
       <td>{{obj.request_date}}</td>
       <td>{{obj.results}}</td>
       <td>{{obj.cost}}</td>
-      </td>
     </tr>
     {% endfor %}
   </tbody>

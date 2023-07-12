@@ -34,13 +34,6 @@
 </nav>
 {% endblock header %} {% block content %}
 
-<form method="post" action="{% url 'create_request' %}">
-  {% csrf_token %}
-  <label for="description">Description:</label>
-  <input type="text" id="description" name="description" required />
-  <input type="submit" value="Submit" />
-</form>
-
 <table class="table table-bordered">
   <thead>
     <tr>
@@ -49,6 +42,7 @@
       <th>Date</th>
       <th>Results</th>
       <th>Cost</th>
+      <th>Change result</th>
     </tr>
   </thead>
   <tbody>
@@ -59,6 +53,14 @@
       <td>{{obj.request_date}}</td>
       <td>{{obj.results}}</td>
       <td>{{obj.cost}}</td>
+      <td>
+        <form method="POST" action="{% url 'ins_req_result' %}">
+          {% csrf_token %}
+          <input type="hidden" name="id" value="{{ obj.id }}" />
+          <button type="submit" class="btn btn-info" id="add">
+            Add result
+          </button>
+        </form>
       </td>
     </tr>
     {% endfor %}

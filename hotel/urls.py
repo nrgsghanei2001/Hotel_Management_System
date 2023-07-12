@@ -9,5 +9,10 @@ urlpatterns = [
     path('visit_rooms/status/', views.visit_rooms_status, name='visit_rooms_status'),
     path('service/', views.service, name='service'),
     path('request_installation/', views.request_installation, name='request_installation'),
-    path('request_result/', views.create_request, name='create_request')
+    path('request_result/', views.create_request, name='create_request'),
+    path('manage_installation/', views.manage_installation, name = 'manage_installation'),
+    path('ins_req_result/', views.ins_req_result, name='ins_req_result'),
+    path('update_req_result/', views.update_result_ins, name='update_result_ins')
+    
+
 ]

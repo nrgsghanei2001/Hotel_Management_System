@@ -33,9 +33,13 @@ def service(request):
 
 def request_installation(request):
     req = list(Installation_request.objects.filter(guest__user=request.user))
-    print(req)
     context = {'req' : req}
     return render(request, 'hotel/request_installation.html', context)
+
+def manage_installation(request):
+    req = Installation_request.objects.all().order_by('request_date')
+    context = {'req' : req}
+    return render(request, 'hotel/manage_installation.html', context)
 
 def create_request(request):
     if request.method == 'POST':
@@ -70,3 +74,32 @@ def create_request(request):
         )
         installation_request.save()
     return render(request, 'hotel/create_request.html')
+
+def ins_req_result(request):
+
+    install_requests = list(Installation_request.objects.all())
+    objlist = []
+    if request.method == "POST":
+        for obj in install_requests:
+            if(str(request.POST.get('id')) == str(obj.id)):
+                objlist.append(obj)    
+        context = {'req': objlist}
+        return render(request, 'hotel/ins_req_result.html', context)
+    
+
+def update_result_ins(request):
+    objlist = []
+    install_requests = list(Installation_request.objects.all())    
+    if request.method == "POST":
+        for obj in install_requests:
+            print(str(request.POST['id']))
+            print(str(obj.id))
+            if(str(request.POST.get('id')) == str(obj.id)):
+                obj.results = request.POST['description']
+                obj.cost = request.POST['cost']
+                objlist.append(obj)
+                obj.save()
+        context = {'req': objlist}
+    return render(request, 'hotel/ins_req_result.html', context)
+
+

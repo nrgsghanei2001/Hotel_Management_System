@@ -37,20 +37,20 @@
               </thead>
               <tbody>
                   {% for obj in reserves %}
+                    {% for obj1 in obj.reserve_item.all %}
                     <tr>
-                        {% for obj1 in obj.reserve_item.all %}
-                            <td>{{obj1.room.room_number}}</td>
-                            <td>{{obj1.room.capacity}}</td>
-                            <td>
-                            <ul>
-                            {% for o in obj1.staying_time.all %}
-                                <li>{{o.month}}/{{o.day}}</li>
-                            {% endfor %}
-                            </ul>
-                            </td>
-                            <td>{{obj1.total_price}}</td>
+                        <td>{{obj1.room.room_number}}</td>
+                        <td>{{obj1.room.capacity}}</td>
+                        <td>
+                        <ul>
+                        {% for o in obj1.staying_time.all %}
+                            <li>{{o.month}}/{{o.day}}</li>
                         {% endfor %}
-                    </tr>
+                        </ul>
+                        </td>
+                        <td>{{obj1.total_price}}</td>
+                      </tr>
+                    {% endfor %}
                   {% endfor %}
               </tbody>
             </table>

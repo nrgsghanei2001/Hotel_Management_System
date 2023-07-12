@@ -42,7 +42,7 @@ class reserve_item(models.Model):
 
 
 class Reserves(models.Model):
-    guest = models.ForeignKey(Guest, on_delete=models.CASCADE, related_name="Reserves")
+    guest = models.OneToOneField(Guest, on_delete=models.CASCADE, related_name="Reserves")
     reserve_item = models.ManyToManyField(reserve_item, related_name="Reserves")
 
     def item_name(self):

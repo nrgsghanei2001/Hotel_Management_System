@@ -7,10 +7,12 @@ $( document ).ready(function() {
     function send_ajax(){
         data={
             'csrfmiddlewaretoken':CSRF_TOKEN,
-            'filter' :$("#filter :selected").text(),
+            'number' : $("#number").val(),
+            'month' :$("#month :selected").text(),
+            'day' :$("#day :selected").text(),
             };
         console.log(data);
-        alert("ok")
+        alert("in progress")
         console.log("data");
 
         $.ajax({
@@ -27,6 +29,4 @@ $( document ).ready(function() {
             }
         });
     }
-
-    
 });

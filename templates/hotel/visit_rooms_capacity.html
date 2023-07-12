@@ -35,7 +35,6 @@
                 <tr>
                   <th>Room number</th>
                   <th>Capacity</th>
-                  <th>Availability</th>
                   <th>Price Per Night</th>
                   <th>Reserve</th>
                 </tr>
@@ -45,7 +44,6 @@
                     <tr>
                         <td>{{obj.room_number}}</td>
                         <td>{{obj.capacity}}</td>
-                        <td>{{obj.availability}}</td>
                         <td>{{obj.price}}</td>
                         <td><button class="btn btn-info" id="add">Add</button>
                           <a href="#"></a></td>
@@ -55,12 +53,12 @@
             </table>
           </div>
 
-          {% load static %}
-          <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-          <script>
-              var CSRF_TOKEN = '{{ csrf_token }}';
-              var URL = "{% url 'visit_rooms' %}"
-          </script>
-          <script src={% static 'filter_room.js' %}></script>
+          {% comment %} {% load static %} {% endcomment %}
+          {% comment %} <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script> {% endcomment %}
+          {% comment %} <script> {% endcomment %}
+              {% comment %} var CSRF_TOKEN = '{{ csrf_token }}'; {% endcomment %}
+              {% comment %} var URL = "{% url 'visit_rooms' %}" {% endcomment %}
+          {% comment %} </script> {% endcomment %}
+          {% comment %} <script src={% static 'filter_room.js' %}></script> {% endcomment %}
 </body>
 </html>

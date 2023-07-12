@@ -41,7 +41,7 @@
                         <td>{{obj.room_number}}</td>
                         <td>{{obj.capacity}}</td>
                         <td>{{obj.price}}</td>
-                        <td><a href="#" class="btn btn-warning">Delete</a></td>
+                        <td><a href="{% url 'delete_room' obj.pk %}" class="btn btn-warning">Delete</a></td>
                     </tr>
                   {% endfor %}
               </tbody>

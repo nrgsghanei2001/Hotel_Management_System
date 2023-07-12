@@ -109,7 +109,6 @@ def reserve_room(request, pk):
     return render(request, 'hotel/reserve_room.html', context)
 
 
-
 def add_room(request):
     if request.method == 'POST'  and request.is_ajax():
         text = request.POST
@@ -128,6 +127,16 @@ def all_rooms(request):
     context = {'rooms':rooms}
     return render(request, 'hotel/all_rooms.html', context)
 
+
+def delete_room(request, pk):
+    room = Room.objects.get(id=pk)
+    reserve_items = reserve_item.objects.filter(room__pk=pk)
+    for o in reserve_items:
+        o.delete()
+    room.delete()
+    rooms = Room.objects.all()
+    context = {'rooms':rooms}
+    return render(request, 'hotel/all_rooms.html', context)
 
 def service(request):
     return render(request, 'hotel/service.html')

@@ -18,40 +18,11 @@
 	</head>
 	<body>
         <div class="container">
-            <br>
-            <br>
-            <a class="btn btn-danger" href="{% url 'home' %}">Home</a>
-            <br>
-            <br>
-            <a class="btn btn-danger" href="{% url 'visit_rooms' %}">back</a>
-            <br>
-            <br>
-           
- 
-            <hr>
-            <h2>All Rooms Filtered by capacity</h2>         
-            <table class="table table-bordered">
-              <thead>
-                <tr>
-                  <th>Room number</th>
-                  <th>Capacity</th>
-                  <th>Price Per Night</th>
-                  <th>Reserve</th>
-                </tr>
-              </thead>
-              <tbody>
-                  {% for obj in rooms %}
-                    <tr>
-                        <td>{{obj.room_number}}</td>
-                        <td>{{obj.capacity}}</td>
-                        <td>{{obj.price}}</td>
-                        <td><a href="{% url 'reserve_room' obj.pk %}" class="btn btn-info">Reserve</a></td>
-                    </tr>
-                  {% endfor %}
-              </tbody>
-            </table>
-          </div>
-
-
+            <h2>You should pay {{total_price}}$. Are you sure?</h2>
+            <div class="container">
+                <a class="btn btn-danger" href="{% url 'confirm_pay' %}">Yes</a>
+                <a class="btn btn-success" href="{% url 'home' %}">No</a>
+            </div>
+        </div>
 </body>
 </html>

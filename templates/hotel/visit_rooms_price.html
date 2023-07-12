@@ -45,20 +45,13 @@
                         <td>{{obj.room_number}}</td>
                         <td>{{obj.capacity}}</td>
                         <td>{{obj.price}}</td>
-                        <td><button class="btn btn-info" id="add">Add</button>
-                          <a href="#"></a></td>
+                        <td><a href="{% url 'reserve_room' obj.pk %}" class="btn btn-info">Reserve</a></td>
                     </tr>
                   {% endfor %}
               </tbody>
             </table>
           </div>
 
-          {% comment %} {% load static %}
-          <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-          <script>
-              var CSRF_TOKEN = '{{ csrf_token }}';
-              var URL = "{% url 'visit_rooms' %}"
-          </script>
-          <script src={% static 'filter_room.js' %}></script> {% endcomment %}
+        
 </body>
 </html>

@@ -68,9 +68,6 @@ def cancle_reserve(request):
                 break
         bi.total_price -= price
         bi.save()
-        # order.total_price -= order_item.price
-        # order_item.delete()
-        # order.save()
         return render(request, 'hotel_site/my_reservations.html')
     return render(request, 'hotel_site/my_reservations.html')
 
@@ -79,3 +76,29 @@ def my_bill(request):
     bills = list(Bill.objects.filter(guest__user=request.user))
     context = {'bills':bills}
     return render(request, 'hotel_site/my_bills.html', context)
+
+
+def pay_bill(request):
+    bills = list(Bill.objects.filter(guest__user=request.user))
+    total_price = 0
+    for b in bills:
+        total_price += b.total_price
+
+    context = {'total_price':total_price}
+    return render(request, 'hotel_site/bank.html', context)
+
+
+def confirm_pay(request):
+    bills = list(Bill.objects.filter(guest__user=request.user))
+    for b in bills:
+        for bi in b.bill_item.all():
+            bi.status = "p"
+            bi.save()
+        if b.total_price > 0:
+            b.total_price = 0.0
+        b.save()
+    bills = list(Bill.objects.filter(guest__user=request.user))
+    context = {'bills':bills}
+    return render(request, 'hotel_site/my_bills.html', context)
+
+

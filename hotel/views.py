@@ -3,6 +3,20 @@ from django.http import JsonResponse
 from django.http import HttpResponse
 from .models import *
 from django.db.models import Q
+import datetime
+
+
+def get_room_number(request):
+    reserves = list(Reserves.objects.filter(guest__user=request.user))
+    roomNumber = None
+    for obj in reserves:
+        for obj2 in obj.reserve_item.all():
+            for obj3 in list(obj2.staying_time.all()):
+                d1 = '{d.month}/{d.day}'.format(d=datetime.datetime.now())
+                if (d1 == str(obj3)):
+                    roomNumber = obj2.room.room_number
+                    return roomNumber
+    return roomNumber
 
 
 def visit_rooms(request):
@@ -34,6 +48,9 @@ def service(request):
 
 
 def service_food(request):
+    if (get_room_number(request) == None):
+        return render(request, 'hotel/no_room.html')
+
     email = request.user.email
     if request.method == "POST":
         current = Order.objects.filter(email=email).get(status=0)
@@ -74,3 +91,49 @@ def food_request(request):
         order.save()
     orders = Order.objects.filter(status=1).filter(~Q(price=0))
     return render(request, 'hotel/food_request.html', {'orders': orders})
+
+
+def menu(request):
+    if request.method == "POST":
+        type = request.POST.get('type')
+        name = request.POST.get('name')
+        price = int(request.POST.get('price'))
+        quantity = int(request.POST.get('quantity'))
+        if (type == '0'):
+            food = Food.objects.filter(name=name).filter(
+                price=price).get(quantity=quantity)
+            food.delete()
+        else:
+            food = Food(name=name, price=int(price), quantity=int(quantity))
+            food.save()
+
+    foods = Food.objects.all
+    return render(request, 'hotel/menu.html', {'foods': foods})
+
+
+def internet(request):
+    if (get_room_number(request) == None):
+        return render(request, 'hotel/no_room.html')
+    email = request.user.email
+    account = InternetAccount.objects.filter(email=email)
+    if request.method == "POST":
+        password1 = request.POST.get('password1')
+        password2 = request.POST.get('password2')
+        if (password1 != "" and password1 == password2):
+            if (len(account) == 0):
+                account = InternetAccount(
+                    email=email, password=password1)
+            else:
+                account = account[0]
+                account.password = password1
+            account.save()
+
+    account = InternetAccount.objects.filter(email=email)
+    has = "1"
+    if (len(account) == 0):
+        account = None
+        has = "0"
+    else:
+        account = account[0]
+
+    return render(request, 'hotel/internet.html', {'account': account, 'has': has})

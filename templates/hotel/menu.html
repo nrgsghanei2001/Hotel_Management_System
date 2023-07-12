@@ -46,7 +46,7 @@
             <th>Food name</th>
             <th>Left quantity</th>
             <th>Price</th>
-            <th>Order</th>
+            <th>Remove</th>
           </tr>
         </thead>
         <tbody>
@@ -66,7 +66,7 @@
                 />
                 <input type="hidden" name="price" value="{{ obj.price }}" />
                 <input type="hidden" name="type" value="0" />
-                <button type="submit" class="btn btn-danger">Order</button>
+                <button type="submit" class="btn btn-danger">Remove</button>
               </form>
             </td>
           </tr>
@@ -75,24 +75,38 @@
       </table>
       <br />
       <br />
-      <table class="table table-bordered">
-        <thead>
-          <tr>
-            <th>Food name</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for food in food_list %}
-          <tr>
-            <td>{{food}}</td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
       <form method="POST">
-        {% csrf_token %}
-        <input type="hidden" name="type" value="1" />
-        <button type="submit" class="btn btn-danger">Submit</button>
+        <div class="row">
+          <div class="col">
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Food name"
+              name="name"
+            />
+          </div>
+          <div class="col">
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Quantity"
+              name="quantity"
+            />
+          </div>
+          <div class="col">
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Price"
+              name="price"
+            />
+          </div>
+          <input type="hidden" name="type" value="1" />
+          {% csrf_token %}
+          <div>
+            <button type="submit" class="btn btn-danger">Add</button>
+          </div>
+        </div>
       </form>
     </div>
   </body>

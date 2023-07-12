@@ -11,5 +11,7 @@ urlpatterns = [
          name='visit_rooms_status'),
     path('service/', views.service, name='service'),
     path('service/food/', views.service_food, name='service_food'),
-    path('food_request/', views.food_request, name='food_request')
+    path('food_request/', views.food_request, name='food_request'),
+    path('menu/', views.menu, name='menu'),
+    path('internet/', views.internet, name='internet')
 ]

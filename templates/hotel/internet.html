@@ -39,60 +39,53 @@
       <br />
 
       <hr />
-      <h2>Menu</h2>
+      <h2>Account information</h2>
       <table class="table table-bordered">
         <thead>
           <tr>
-            <th>Food name</th>
-            <th>Left quantity</th>
-            <th>Price</th>
-            <th>Order</th>
+            <th>Email</th>
+            <th>Password</th>
           </tr>
         </thead>
         <tbody>
-          {% for obj in foods %}
           <tr>
-            <td>{{obj.name}}</td>
-            <td>{{obj.quantity}}</td>
-            <td>{{obj.price}}</td>
             <td>
-              <form method="POST">
-                {% csrf_token %}
-                <input type="hidden" name="name" value="{{ obj.name }}" />
-                <input
-                  type="hidden"
-                  name="quantity"
-                  value="{{ obj.quantity }}"
-                />
-                <input type="hidden" name="price" value="{{ obj.price }}" />
-                <input type="hidden" name="type" value="0" />
-                <button type="submit" class="btn btn-danger">Order</button>
-              </form>
+              {% if account != None %} {{account.email}} {%else%} NA {% endif %}
+            </td>
+            <td>
+              {% if account != None %} {{account.password}} {%else%} NA
+              {%endif%}
             </td>
           </tr>
-          {% endfor %}
         </tbody>
       </table>
       <br />
       <br />
-      <table class="table table-bordered">
-        <thead>
-          <tr>
-            <th>Food name</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for food in food_list %}
-          <tr>
-            <td>{{food}}</td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
       <form method="POST">
-        {% csrf_token %}
-        <input type="hidden" name="type" value="1" />
-        <button type="submit" class="btn btn-danger">Submit</button>
+        <div class="row">
+          <div class="col">
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Password"
+              name="password1"
+            />
+          </div>
+          <div class="col">
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Retype password"
+              name="password2"
+            />
+          </div>
+          {% csrf_token %}
+          <div>
+            <button type="submit" class="btn btn-danger">
+              {% if has == "1" %} Change {% elif has == "0" %} Set {% endif %}
+            </button>
+          </div>
+        </div>
       </form>
     </div>
   </body>

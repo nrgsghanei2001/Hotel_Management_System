@@ -39,8 +39,8 @@
           {% endif %}
           {% if who == "restaurant staff" %}
             <h6> restaurant staff</h6>
-            <li><a href="#"><span class="glyphicon glyphicon-wrench"></span>Menu</a></li>
-            <li><a href="{% url 'food_request' %}"><span class="glyphicon glyphicon-wrench"></span>Food requests</a></li>
+            <li><a href="{% url 'menu'%}"><span class="glyphicon glyphicon-wrench"></span>Menu</a></li>
+            <li><a href="{% url 'food_request'%}"><span class="glyphicon glyphicon-wrench"></span>Food requests</a></li>
           {% endif %}
     
           

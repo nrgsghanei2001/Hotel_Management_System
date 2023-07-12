@@ -72,3 +72,8 @@ class Order(models.Model):
     status = models.IntegerField(default=0)
     id = models.IntegerField(default=0, primary_key=True)
     Date = models.DateTimeField(auto_now_add=True)
+
+
+class InternetAccount(models.Model):
+    password = models.CharField(default="")
+    email = models.CharField(default="")

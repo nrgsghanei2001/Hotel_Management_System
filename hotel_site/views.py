@@ -50,6 +50,31 @@ def my_reservations(request):
     return render(request, 'hotel_site/my_reservations.html', context)
 
 
+def cancle_reserve(request):
+    if request.method == 'POST'  and request.is_ajax():
+        text = request.POST
+        item = reserve_item.objects.get(pk=text['item'])
+        reserve = item.Reserves.last()
+        price = item.total_price
+        room = item.room.room_number
+        guest = reserve.guest
+        item.delete()
+        reserve.save()
+        bi = Bill.objects.get(guest=guest)
+        for o in bi.bill_item.all():
+            if str(room) in o.details and o.cost == price:
+                o.cancle = "y"
+                o.save()
+                break
+        bi.total_price -= price
+        bi.save()
+        # order.total_price -= order_item.price
+        # order_item.delete()
+        # order.save()
+        return render(request, 'hotel_site/my_reservations.html')
+    return render(request, 'hotel_site/my_reservations.html')
+
+
 def my_bill(request):
     bills = list(Bill.objects.filter(guest__user=request.user))
     context = {'bills':bills}

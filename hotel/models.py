@@ -57,10 +57,12 @@ class bill_item(models.Model):
     item_options = (
       ("1", 'restaurant'),('2', 'housekeeping'),('3', 'installations'),('4', 'reservation'))
     status = (('p', 'paid'), ('u', 'unpaid'))
+    cancle = (('n', 'exists'), ('y', 'cancled'))
 
     item = models.CharField(max_length=1, choices=item_options, default=4)
     cost = models.FloatField()
     status = models.CharField(max_length=1, choices=status, default='u')
+    cancle = models.CharField(max_length=1, choices=cancle, default='n', null=True, blank=True)
     details = models.TextField(null=True, blank=True)
 
     def __str__(self):
@@ -70,7 +72,7 @@ class bill_item(models.Model):
 class Bill(models.Model):
     guest = models.OneToOneField(Guest, on_delete=models.CASCADE, related_name="bill")
     bill_item = models.ManyToManyField(bill_item, related_name="bill")
-    total_price = models.FloatField(null=True, blank=True)
+    total_price = models.FloatField(null=True, blank=True, default=0.0)
 
     def __str__(self):
         return self.guest.user.username 

@@ -63,12 +63,14 @@ def reserve_room(request, pk):
         if not flag_conflict:
             room = Room.objects.get(pk=pk)
             price = room.price
+            # print(price)
             item = reserve_item.objects.create(room = room)
             counter = 0
             for o in reserve_dates:
                 item.staying_time.add(o)
                 counter += 1
             price *= counter
+            print(price)
             item.total_price = price
             item.save()
             guest = Guest.objects.get(user=request.user)
@@ -85,6 +87,7 @@ def reserve_room(request, pk):
             except:
                 bill = Bill.objects.create(guest=guest)
             
+            print(price)
             bill.bill_item.add(b_i)
             bill.total_price += price
             bill.save()

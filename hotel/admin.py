@@ -24,7 +24,7 @@ class reserveItemAdmin(admin.ModelAdmin):
 
 @admin.register(bill_item)
 class billItemAdmin(admin.ModelAdmin):
-    list_display = ['item', 'cost', 'status']
+    list_display = ['item', 'cost', 'status', 'cancle']
 
 
 

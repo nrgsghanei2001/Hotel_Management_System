@@ -61,3 +61,14 @@ class Installation_request(models.Model):
     id = models.IntegerField(default=0, primary_key=True)
     def __str__(self):
         return self.description
+    
+class Housekeeping_request(models.Model):
+    description = models.CharField(max_length = 200, default= 'none')
+    request_date = models.DateTimeField("Requested Date")
+    guest = models.ForeignKey(Guest, on_delete=models.CASCADE)
+    results = models.CharField(max_length = 200,null=True, blank=True, default=None)
+    cost = models.FloatField(null=True, blank=True, default=0)
+    roomNumber = models.IntegerField(null=True, blank=True)
+    id = models.IntegerField(default=0, primary_key=True)
+    def __str__(self):
+        return self.description

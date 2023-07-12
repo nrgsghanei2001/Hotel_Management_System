@@ -1,9 +1,9 @@
 {% extends 'hotel_site/base.html' %} {% block title %}
-<title>Services</title>
+<title></title>
 {% endblock title %} {% block header %}
 <div class="jumbotron">
   <div class="container text-center">
-    <h1 style="color: orange">Services</h1>
+    <h1 style="color: orange">Request Housekeeping</h1>
   </div>
 </div>
 
@@ -28,36 +28,40 @@
             ><span class="glyphicon glyphicon-home"></span>Home</a
           >
         </li>
-        <li>
-          <a href="#"
-            ><span class="glyphicon glyphicon-wrench"></span>Services</a
-          >
-        </li>
       </ul>
     </div>
   </div>
 </nav>
 {% endblock header %} {% block content %}
-<div class="container-fluid" style="background-color: rgb(255, 170, 200)">
-  <div class="collapse navbar-collapse" id="myNavbar" color="yellow">
-    <ul class="nav navbar-nav">
-      <li class="active">
-        <a href="#"><span class="glyphicon glyphicon-cutlery"></span>Food</a>
-      </li>
-      <li>
-        <a href="{% url 'request_housekeeping' %}"
-          ><span class="glyphicon glyphicon-filter"></span>House Keeping</a
-        >
-      </li>
-      <li>
-        <a href="{% url 'request_installation' %}"
-          ><span class="glyphicon glyphicon-wrench"></span>Installations</a
-        >
-      </li>
-      <li>
-        <a href="#"><span class="glyphicon glyphicon-phone"></span>Internet</a>
-      </li>
-    </ul>
-  </div>
-</div>
+
+<form method="post" action="{% url 'create_request_hk' %}">
+  {% csrf_token %}
+  <label for="description">Description:</label>
+  <input type="text" id="description" name="description" required />
+  <button type="submit" class="btn btn-info" id="add">Submit</button>
+</form>
+
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>Room</th>
+      <th>Description</th>
+      <th>Date</th>
+      <th>Results</th>
+      <th>Cost</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for obj in req %}
+    <tr>
+      <td>{{obj.roomNumber}}</td>
+      <td>{{obj.description}}</td>
+      <td>{{obj.request_date}}</td>
+      <td>{{obj.results}}</td>
+      <td>{{obj.cost}}</td>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
 {% endblock content %}

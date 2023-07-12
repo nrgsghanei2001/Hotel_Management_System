@@ -122,5 +122,12 @@ def add_room(request):
     
     return render(request, 'hotel/add_room.html')
 
+
+def all_rooms(request):
+    rooms = Room.objects.all()
+    context = {'rooms':rooms}
+    return render(request, 'hotel/all_rooms.html', context)
+
+
 def service(request):
     return render(request, 'hotel/service.html')

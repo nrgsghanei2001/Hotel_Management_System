@@ -1,5 +1,5 @@
 {% extends 'hotel_site/base.html' %} {% block title %}
-<title></title>
+<title>DONE</title>
 {% endblock title %} {% block header %}
 <div class="jumbotron">
   <div class="container text-center">
@@ -33,35 +33,5 @@
   </div>
 </nav>
 {% endblock header %} {% block content %}
-
-<form method="post" action="{% url 'create_request' %}">
-  {% csrf_token %}
-  <label for="description">Description:</label><br />
-  <input type="text" id="description" name="description" required /><br /><br />
-  <input type="submit" value="Submit" />
-</form>
-
-<table class="table table-bordered">
-  <thead>
-    <tr>
-      <th>Room</th>
-      <th>Description</th>
-      <th>Date</th>
-      <th>Results</th>
-      <th>Cost</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for obj in req %}
-    <tr>
-      <td>{{obj.roomNumber}}</td>
-      <td>{{obj.description}}</td>
-      <td>{{obj.request_date}}</td>
-      <td>{{obj.results}}</td>
-      <td>{{obj.cost}}</td>
-      </td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
+<h1>Request was successful.</h1>
 {% endblock content %}

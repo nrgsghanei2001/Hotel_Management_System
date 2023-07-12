@@ -1,6 +1,6 @@
 from django.db import models
 from accounts.models import Guest
-
+from django.contrib.auth.models import User
 
 class Room(models.Model):
     room_number = models.IntegerField(null=False, blank=False, unique=True)
@@ -50,3 +50,13 @@ class Reserves(models.Model):
 
     def __str__(self):
         return self.guest.user.username  + " , ".join(r.item_name() for r in self.reserve_item.all())
+
+class Installation_request(models.Model):
+    description = models.CharField(max_length = 200, default= 'none')
+    request_date = models.DateTimeField("Requested Date")
+    guest = models.ForeignKey(Guest, on_delete=models.CASCADE, related_name="using")
+    results = models.CharField(max_length = 200,null=True, blank=True, default=None)
+    cost = models.FloatField(null=True, blank=True, default=0)
+    roomNumber = models.IntegerField(null=True, blank=True)
+    def __str__(self):
+        return self.description

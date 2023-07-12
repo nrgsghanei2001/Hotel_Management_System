@@ -28,6 +28,11 @@
           {% endif %}
           {% if who == "manager" %}
             <li><a href={% url 'add_staff' %}>Add Staff</a></li>
+            <li><a href={% url 'add_room' %}>Add Room</a></li>
+          {% endif %}
+          {% if who == "receptionist" %}
+            <h6> receptionist</h6>
+            {% comment %} <li><a href="#"><span class="glyphicon glyphicon-wrench"></span>Housekeeping requests</a></li> {% endcomment %}
           {% endif %}
           {% if who == "housekeeper" %}
             <h6> house keeper</h6>

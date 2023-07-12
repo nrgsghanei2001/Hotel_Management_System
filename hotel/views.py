@@ -109,5 +109,18 @@ def reserve_room(request, pk):
     return render(request, 'hotel/reserve_room.html', context)
 
 
+
+def add_room(request):
+    if request.method == 'POST'  and request.is_ajax():
+        text = request.POST
+        room_number = int(text['room_number'])
+        capacity = int(text['capacity'])
+        price = float(text['price'])
+        room = Room.objects.create(room_number=room_number, capacity=capacity, price=price)
+        room.save()
+        return JsonResponse({"text":text})
+    
+    return render(request, 'hotel/add_room.html')
+
 def service(request):
     return render(request, 'hotel/service.html')

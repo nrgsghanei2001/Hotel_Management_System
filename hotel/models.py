@@ -50,3 +50,27 @@ class Reserves(models.Model):
 
     def __str__(self):
         return self.guest.user.username  + " , ".join(r.item_name() for r in self.reserve_item.all())
+
+
+
+class bill_item(models.Model):
+    item_options = (
+      ("1", 'restaurant'),('2', 'housekeeping'),('3', 'installations'),('4', 'reservation'))
+    status = (('p', 'paid'), ('u', 'unpaid'))
+
+    item = models.CharField(max_length=1, choices=item_options, default=4)
+    cost = models.FloatField()
+    status = models.CharField(max_length=1, choices=status, default='u')
+    details = models.TextField(null=True, blank=True)
+
+    def __str__(self):
+        return self.item
+
+
+class Bill(models.Model):
+    guest = models.OneToOneField(Guest, on_delete=models.CASCADE, related_name="bill")
+    bill_item = models.ManyToManyField(bill_item, related_name="bill")
+    total_price = models.FloatField(null=True, blank=True)
+
+    def __str__(self):
+        return self.guest.user.username 

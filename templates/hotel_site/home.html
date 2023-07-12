@@ -48,7 +48,7 @@
         <ul class="nav navbar-nav navbar-right">
           {% if who == "guest" %}
             <li><a href="{% url 'my_reservations' %}"><span class="glyphicon glyphicon-shopping-cart"></span>My reservations</a></li>
-            <li><a href="#"><span class="	glyphicon glyphicon-usd"></span>Bill</a></li>
+            <li><a href="{% url 'my_bill' %}"><span class="	glyphicon glyphicon-usd"></span>Bill</a></li>
           {% endif %}
           {% if user.is_authenticated %}
             <li><a href={% url 'logout' %}><span class="glyphicon glyphicon-user"></span>Log Out</a></li>

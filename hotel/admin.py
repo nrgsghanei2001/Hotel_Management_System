@@ -22,6 +22,12 @@ class reserveItemAdmin(admin.ModelAdmin):
         return "room "+str(obj.room.room_number) + " days:"+ " , ".join(f"{s.month}/{s.day}" for s in obj.staying_time.all())
 
 
+@admin.register(bill_item)
+class billItemAdmin(admin.ModelAdmin):
+    list_display = ['item', 'cost', 'status']
+
+
+
 
 @admin.register(Reserves)
 class reservesAdmin(admin.ModelAdmin):
@@ -36,4 +42,10 @@ class reservesAdmin(admin.ModelAdmin):
         return " , ".join(r.item_name() for r in obj.reserve_item.all())
 
 
+@admin.register(Bill)
+class billAdmin(admin.ModelAdmin):
+    list_display = ['Guest', 'total_price']
 
+    @admin.display(description='Guest')
+    def Guest(self, obj):
+        return obj.guest.user.username

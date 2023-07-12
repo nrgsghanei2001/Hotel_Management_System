@@ -72,9 +72,22 @@ def reserve_room(request, pk):
             item.total_price = price
             item.save()
             guest = Guest.objects.get(user=request.user)
-            reserve = Reserves.objects.get(guest=guest)
+            try:
+                reserve = Reserves.objects.get(guest=guest)
+            except:
+                reserve = Reserves.objects.create(guest=guest)
             reserve.reserve_item.add(item)
             reserve.save()
+            b_i = bill_item.objects.create(item="4", cost=price, status="u", 
+            details=f"reserve room {room.room_number} for {counter} nights.")
+            try:
+                bill = Bill.objects.get(guest=guest)
+            except:
+                bill = Bill.objects.create(guest=guest)
+            
+            bill.bill_item.add(b_i)
+            bill.total_price += price
+            bill.save()
         else:
             error = "no"
 

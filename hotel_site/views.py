@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from hotel.models import Reserves
+from hotel.models import *
 from accounts.models import *
 
 def home(request):
@@ -48,3 +48,9 @@ def my_reservations(request):
             o1.save()
     context = {'reserves':reserves}
     return render(request, 'hotel_site/my_reservations.html', context)
+
+
+def my_bill(request):
+    bills = list(Bill.objects.filter(guest__user=request.user))
+    context = {'bills':bills}
+    return render(request, 'hotel_site/my_bills.html', context)

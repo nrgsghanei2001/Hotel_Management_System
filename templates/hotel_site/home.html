@@ -1,6 +1,6 @@
 {% extends './base.html' %}
 {% block title %}
-<title>Blah Blah Hotel</title>
+<title>Hotel Transylvania </title>
 {% endblock title %}
 
 {% block header %}
@@ -27,15 +27,21 @@
             <li><a href="{% url 'service' %}"><span class="glyphicon glyphicon-wrench"></span>Services</a></li>
           {% endif %}
           {% if who == "manager" %}
-            <li><a href={% url 'add_staff' %}>Add Staff</a></li>
+            <li><a href="{% url 'add_staff' %}">Add Staff</a></li>
           {% endif %}
           {% if who == "housekeeper" %}
-            <h6> house keeper</h6>
-            <li><a href="#"><span class="glyphicon glyphicon-wrench"></span>Housekeeping requests</a></li>
+          </br>
+          </br>
+        </br>
+            <h4> Welcome dear housekeeper</h4>
+            <li><a href="{% url 'manage_housekeeping' %}"><span class="glyphicon glyphicon-wrench"></span>Housekeeping requests</a></li>
           {% endif %}
           {% if  who == "installer" %}
-            <h6> installer</h6>
-            <li><a href="#"><span class="glyphicon glyphicon-wrench"></span>Installation requests</a></li>
+          </br>
+          </br>
+        </br>
+            <h4> Welcome dear installer</h4>
+            <li><a href="{% url 'manage_installation' %}"><span class="glyphicon glyphicon-wrench"></span>Installation requests</a></li>
           {% endif %}
           {% if who == "restaurant staff" %}
             <h6> restaurant staff</h6>
@@ -51,9 +57,9 @@
             <li><a href="#"><span class="	glyphicon glyphicon-usd"></span>Bill</a></li>
           {% endif %}
           {% if user.is_authenticated %}
-            <li><a href={% url 'logout' %}><span class="glyphicon glyphicon-user"></span>Log Out</a></li>
+            <li><a href="{% url 'logout' %}"><span class="glyphicon glyphicon-user"></span>Log Out</a></li>
           {% else %}
-            <li><a href={% url 'login' %}><span class="glyphicon glyphicon-user"></span>Log In</a></li>
+            <li><a href="{% url 'login' %}"><span class="glyphicon glyphicon-user"></span>Log In</a></li>
             <li><a href="{% url 'sign_up' %}"><span class="glyphicon glyphicon-user"></span>Sign Up</a></li>
           {% endif %}
       </ul>

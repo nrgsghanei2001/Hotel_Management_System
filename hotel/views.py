@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.http import HttpResponse
 from django.http.response import HttpResponseForbidden
@@ -137,6 +137,50 @@ def delete_room(request, pk):
     rooms = Room.objects.all()
     context = {'rooms':rooms}
     return render(request, 'hotel/all_rooms.html', context)
+
+
+def cancle_reserve_manager(request, pk):
+    item = reserve_item.objects.get(pk=pk)
+    reserve = item.Reserves.last()
+    price = item.total_price
+    room = item.room.room_number
+    guest = reserve.guest
+    item.delete()
+    reserve.save()
+    bi = Bill.objects.get(guest=guest)
+    for o in bi.bill_item.all():
+        if str(room) in o.details and o.cost == price:
+            o.cancle = "y"
+            o.save()
+            break
+    bi.total_price -= price
+    bi.save()
+
+    reserves = Reserves.objects.all()
+    context = {'reserves':reserves}
+    return redirect("all_reserves")
+    # return render(request, 'hotel/all_reserves.html', context)
+
+
+def all_reserves(request):
+    if request.method == 'POST'  and request.is_ajax():
+        text = request.POST
+        username = text['username']
+        reserve = Reserves.objects.get(guest__user__username=username)
+        counter = 1
+        context = {}
+        for i in reserve.reserve_item.all():
+            y = " , ".join(f"{s.month}/{s.day}" for s in i.staying_time.all())
+            x = {'room':i.room.room_number, 'price':i.total_price, 'staying_time': y, 'pk': i.pk}
+            key = str(counter)
+            context[key] = x
+            counter += 1
+        return JsonResponse(context)
+
+    reserves = Reserves.objects.all()
+    context = {'reserves':reserves}
+    return render(request, 'hotel/all_reserves.html', context)
+
 
 def service(request):
     return render(request, 'hotel/service.html')

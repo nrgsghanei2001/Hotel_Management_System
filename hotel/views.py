@@ -236,10 +236,11 @@ def service_food(request):
     current = Order.objects.filter(email=email).filter(status=0)
     if (len(current) == 0):
         mx = 1
-        if (len(Order.objects.all) > 0):
+        if (len(Order.objects.filter()) > 0):
             mx = Order.objects.latest('id')
+            mx = mx.id
         current = Order(food_list="", price=0,
-                        email=email, status=0, id=mx.id + 1)
+                        email=email, status=0, id=mx + 1)
         current.save()
     else:
         current = current[0]

@@ -33,8 +33,7 @@
             <li><a href={% url 'all_reserves' %}>All Reserves</a></li>
           {% endif %}
           {% if who == "receptionist" %}
-            <h6> receptionist</h6>
-            {% comment %} <li><a href="#"><span class="glyphicon glyphicon-wrench"></span>Housekeeping requests</a></li> {% endcomment %}
+            <li><a href={% url 'all_reserves' %}>All Reserves</a></li>
           {% endif %}
           {% if who == "housekeeper" %}
             <h6> house keeper</h6>

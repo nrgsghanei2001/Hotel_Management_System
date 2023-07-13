@@ -13,4 +13,5 @@ urlpatterns = [
     path('all_rooms/<int:pk>', views.delete_room, name='delete_room'),
     path('all_reserves/', views.all_reserves, name='all_reserves'),
     path('all_reserves/cancle_reserve_manager/<int:pk>', views.cancle_reserve_manager, name='cancle_reserve_manager'),
+    path('reckoning/<int:pk>', views.reckoning, name='reckoning'),
 ]

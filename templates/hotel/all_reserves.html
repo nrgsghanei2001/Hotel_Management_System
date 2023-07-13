@@ -56,11 +56,16 @@
                   <th>room</th>
                   <th>staying times</th>
                   <th>total price</th>
+                  <th>cancle</th>
+                  <th>reckoning</th>
                 </tr>
               </thead>
               <tbody>
                   {% for obj in reserves %}
                   {% for obj1 in obj.reserve_item.all %}
+                  {% if obj1.leave %}
+                  {% else %}
+
                     <tr>
                         <td>{{obj.guest.user.username}}</td>
                         <td>{{obj1.room.room_number}}</td>
@@ -73,7 +78,10 @@
                         </td>
                         <td>{{obj1.total_price}}</td>
                         <td><a href="{% url 'cancle_reserve_manager' obj1.pk  %}" class="btn btn-danger">cancle</a></td>
+                        <td><a href="{% url 'reckoning' obj1.pk  %}" class="btn btn-success">reckoning</a></td>
                     </tr>
+
+                  {% endif %}
                   {% endfor %}
                   {% endfor %}
               </tbody>

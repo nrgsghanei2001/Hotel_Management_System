@@ -159,7 +159,6 @@ def cancle_reserve_manager(request, pk):
     reserves = Reserves.objects.all()
     context = {'reserves':reserves}
     return redirect("all_reserves")
-    # return render(request, 'hotel/all_reserves.html', context)
 
 
 def all_reserves(request):
@@ -170,16 +169,41 @@ def all_reserves(request):
         counter = 1
         context = {}
         for i in reserve.reserve_item.all():
-            y = " , ".join(f"{s.month}/{s.day}" for s in i.staying_time.all())
-            x = {'room':i.room.room_number, 'price':i.total_price, 'staying_time': y, 'pk': i.pk}
-            key = str(counter)
-            context[key] = x
-            counter += 1
+            if not i.leave:
+                y = " , ".join(f"{s.month}/{s.day}" for s in i.staying_time.all())
+                x = {'room':i.room.room_number, 'price':i.total_price, 'staying_time': y, 'pk': i.pk}
+                key = str(counter)
+                context[key] = x
+                counter += 1
         return JsonResponse(context)
 
     reserves = Reserves.objects.all()
     context = {'reserves':reserves}
     return render(request, 'hotel/all_reserves.html', context)
+
+
+def reckoning(request, pk):
+    item = reserve_item.objects.get(pk=pk)
+    item.leave = True
+    item.save()
+    reserve = item.Reserves.last()
+    price = item.total_price
+    room = item.room.room_number
+    guest = reserve.guest
+    bi = Bill.objects.get(guest=guest)
+    for o in bi.bill_item.all():
+        if str(room) in o.details and o.cost == price:
+            o.status = "p"
+            o.save()
+            break
+    bi.total_price -= price
+    bi.save()
+
+
+    reserves = Reserves.objects.all()
+    context = {'reserves':reserves}
+    return render(request, 'hotel/all_reserves.html', context)
+
 
 
 def service(request):

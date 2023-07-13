@@ -64,8 +64,25 @@ def service_food(request):
                 current.food_list += name + '#'
                 current.price += price
                 food_obj.save()
-        else:
+        elif (type == '1'):
             current.status = 1
+        else:
+            name = request.POST.get('name')
+            food_obj = Food.objects.get(name=name)
+            price = food_obj.price
+            food_obj.quantity += 1
+            current.price -= price
+            food_obj.save()
+
+            food_list = current.food_list.split('#')[:-1]
+            new_food_list = ""
+            flag = False
+            for food in food_list:
+                if (food == name and flag == False):
+                    flag = True
+                else:
+                    new_food_list += food + '#'
+            current.food_list = new_food_list
         current.save()
 
     current = Order.objects.filter(email=email).filter(status=0)

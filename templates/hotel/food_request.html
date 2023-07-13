@@ -39,61 +39,34 @@
       <br />
 
       <hr />
-      <h2>Menu</h2>
+      <h2>Your Orders</h2>
       <table class="table table-bordered">
         <thead>
           <tr>
-            <th>Food name</th>
-            <th>Left quantity</th>
+            <th>Foods</th>
             <th>Price</th>
-            <th>Order</th>
+            <th>Date</th>
+            <th>Send</th>
           </tr>
         </thead>
         <tbody>
-          {% for obj in foods %}
+          {% for order in orders %}
           <tr>
-            <td>{{obj.name}}</td>
-            <td>{{obj.quantity}}</td>
-            <td>{{obj.price}}</td>
+            <td>{{order.food_list}}</td>
+            <td>{{order.price}}</td>
+            <td>{{order.Date}}</td>
             <td>
               <form method="POST">
                 {% csrf_token %}
-                <input type="hidden" name="name" value="{{ obj.name }}" />
-                <input
-                  type="hidden"
-                  name="quantity"
-                  value="{{ obj.quantity }}"
-                />
-                <input type="hidden" name="price" value="{{ obj.price }}" />
+                <input type="hidden" name="id" value="{{ order.id }}" />
                 <input type="hidden" name="type" value="0" />
-                <button type="submit" class="btn btn-danger">Order</button>
+                <button type="submit" class="btn btn-danger">Send</button>
               </form>
             </td>
           </tr>
           {% endfor %}
         </tbody>
       </table>
-      <br />
-      <br />
-      <table class="table table-bordered">
-        <thead>
-          <tr>
-            <th>Food name</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for food in food_list %}
-          <tr>
-            <td>{{food}}</td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-      <form method="POST">
-        {% csrf_token %}
-        <input type="hidden" name="type" value="1" />
-        <button type="submit" class="btn btn-danger">Submit</button>
-      </form>
     </div>
   </body>
 </html>

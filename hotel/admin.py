@@ -19,8 +19,7 @@ class reserveItemAdmin(admin.ModelAdmin):
 
     @admin.display(description='staying time')
     def time(self, obj):
-        return "room "+str(obj.room.room_number) + " days:"+ " , ".join(f"{s.month}/{s.day}" for s in obj.staying_time.all())
-
+        return "room "+str(obj.room.room_number) + " days:" + " , ".join(f"{s.month}/{s.day}" for s in obj.staying_time.all())
 
 
 @admin.register(Reserves)
@@ -36,4 +35,11 @@ class reservesAdmin(admin.ModelAdmin):
         return " , ".join(r.item_name() for r in obj.reserve_item.all())
 
 
+@admin.register(Food)
+class foodAdmin(admin.ModelAdmin):
+    list_display = ['name', 'quantity', 'price']
 
+
+@admin.register(Order)
+class orderAdmin(admin.ModelAdmin):
+    list_display = ['food_list', 'price', 'id', 'email', 'status', 'Date']

@@ -1,66 +1,47 @@
-{% extends 'hotel_site/base.html' %} {% block title %}
+{% extends 'hotel_site/base.html' %}
+{% block title %}
 <title>Services</title>
-{% endblock title %} {% block header %}
-<div class="jumbotron">
-  <div class="container text-center">
-    <h1 style="color: orange">Services</h1>
-  </div>
-</div>
+{% endblock title %}
 
-<nav class="navbar navbar-inverse">
-  <div class="container-fluid" style="background-color: rgb(250, 150, 100)">
-    <div class="navbar-header">
-      <button
-        type="button"
-        class="navbar-toggle"
-        data-toggle="collapse"
-        data-target="#myNavbar"
-      >
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-    </div>
-    <div class="collapse navbar-collapse" id="myNavbar" color="Blue">
-      <ul class="nav navbar-nav">
-        <li class="active">
-          <a href="{% url 'home' %}"
-            ><span class="glyphicon glyphicon-home"></span>Home</a
-          >
-        </li>
-        <li>
-          <a href="{% url 'service' %}"
-            ><span class="glyphicon glyphicon-wrench"></span>Services</a
-          >
-        </li>
-      </ul>
+{% block header %}
+<div class="jumbotron">
+    <div class="container text-center">
+      <h1 style="color:orange;">Services</h1>      
     </div>
   </div>
-</nav>
-{% endblock header %} {% block content %}
-<div class="container-fluid" style="background-color: rgb(255, 170, 200)">
-  <div class="collapse navbar-collapse" id="myNavbar" color="yellow">
-    <ul class="nav navbar-nav">
-      <li class="active">
-        <a href="{% url 'service_food' %}"
-          ><span class="glyphicon glyphicon-cutlery"></span>Food</a
-        >
-      </li>
-      <li>
-        <a href="{% url 'request_housekeeping' %}"
-          ><span class="glyphicon glyphicon-filter"></span>House Keeping</a
-        >
-      </li>
-      <li>
-        <a href="{% url 'request_installation' %}"><span class="glyphicon glyphicon-wrench"></span>Installations</a
-        >
-      </li>
-      <li>
-        <a href="{% url 'internet' %}"
-          ><span class="glyphicon glyphicon-phone"></span>Internet</a
-        >
-      </li>
-    </ul>
-  </div>
-</div>
+  
+  <nav class="navbar navbar-inverse">
+    <div class="container-fluid" style="background-color: rgb(250, 150, 100);">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>                        
+        </button>
+      </div>
+      <div class="collapse navbar-collapse" id="myNavbar" color="Blue">
+        <ul class="nav navbar-nav">
+          <li class="active"><a href="{% url 'home' %}"><span class="glyphicon glyphicon-home"></span>Home</a></li>
+          <li><a href="#"><span class="glyphicon glyphicon-wrench"></span>Services</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+{% endblock header %}
+{% block content %}
+    <div class="container-fluid" style="background-color: rgb(255, 170, 200);">
+      <div class="collapse navbar-collapse" id="myNavbar" color="yellow">
+        <ul class="nav navbar-nav">
+          <li class="active"><a href="#"><span class="	glyphicon glyphicon-cutlery"></span>Food</a></li>
+          <li><a href="#"><span class="glyphicon glyphicon-filter"></span>House Keeping</a></li>
+          <li><a href="#"><span class="glyphicon glyphicon-wrench"></span>Installations</a></li>
+          <li><a href="#"><span class="glyphicon glyphicon-phone"></span>Internet</a></li>
+        </ul>
+      </div>
+    </div>
 {% endblock content %}
+
+
+
+
+

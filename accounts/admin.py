@@ -13,6 +13,3 @@ class StaffAdmin(admin.ModelAdmin):
     list_display = ['user', 'email', 'role']
     list_editable = ['email']
 
-@admin.register(Role)
-class RoleAdmin(admin.ModelAdmin):
-    list_display = ['name']

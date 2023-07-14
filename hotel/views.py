@@ -1,307 +1,210 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.http import HttpResponse
+from django.http.response import HttpResponseForbidden
+
 from .models import *
-from django.utils import timezone
-from django.db.models import Q
-import datetime
-
-
-def get_room_number(request):
-    reserves = list(Reserves.objects.filter(guest__user=request.user))
-    roomNumber = None
-    for obj in reserves:
-        for obj2 in obj.reserve_item.all():
-            for obj3 in list(obj2.staying_time.all()):
-                d1 = '{d.month}/{d.day}'.format(d=datetime.datetime.now())
-                if (d1 == str(obj3)):
-                    roomNumber = obj2.room.room_number
-                    return roomNumber
-    return roomNumber
 
 
 def visit_rooms(request):
     rooms = Room.objects.all()
-    context = {'rooms': rooms}
+    context = {'rooms':rooms}
     return render(request, 'hotel/visit_rooms.html', context)
 
 
 def visit_rooms_capacity(request):
     rooms = Room.objects.all().order_by('capacity')
-    context = {'rooms': rooms}
+    context = {'rooms':rooms}
     return render(request, 'hotel/visit_rooms_capacity.html', context)
 
 
 def visit_rooms_price(request):
     rooms = Room.objects.all().order_by('price')
-    context = {'rooms': rooms}
+    context = {'rooms':rooms}
     return render(request, 'hotel/visit_rooms_price.html', context)
 
 
-def visit_rooms_status(request):
-    rooms = Room.objects.filter(availability=True)
-    context = {'rooms': rooms}
-    return render(request, 'hotel/visit_rooms_status.html', context)
+
+def reserve_room(request, pk):
+    if request.method == 'POST'  and request.is_ajax():
+        text = request.POST
+        number = int(text['number'])
+        month = text['month']
+        day = text['day']
+        months = calender.Months
+        for i in months:
+            if i[1] == month:
+                month = int(i[0])
+        days = calender.Days
+        for i in days:
+            if i[1] == day:
+                day = int(i[0])
+        # print(day, month)
+        reserve_dates = []
+        for i in range(number):
+            if day > 30:
+                day = day % 30
+                month += 1
+            d = calender.objects.create(month=str(month), day=str(day))
+            reserve_dates.append(d)
+            day += 1
+        reserve_items = reserve_item.objects.filter(room__pk=pk)
+        reserved_stay_times = []
+        for o in reserve_items:
+            for o1 in o.staying_time.all():
+                reserved_stay_times.append(o1)
+        flag_conflict = False
+        for o in reserved_stay_times:
+            for o2 in reserve_dates:
+                if o.day == o2.day and o.month == o2.month:
+                    flag_conflict = True
+                    break
+        print(flag_conflict)
+        if not flag_conflict:
+            room = Room.objects.get(pk=pk)
+            price = room.price
+            # print(price)
+            item = reserve_item.objects.create(room = room)
+            counter = 0
+            for o in reserve_dates:
+                item.staying_time.add(o)
+                counter += 1
+            price *= counter
+            print(price)
+            item.total_price = price
+            item.save()
+            guest = Guest.objects.get(user=request.user)
+            try:
+                reserve = Reserves.objects.get(guest=guest)
+            except:
+                reserve = Reserves.objects.create(guest=guest)
+            reserve.reserve_item.add(item)
+            reserve.save()
+            b_i = bill_item.objects.create(item="4", cost=price, status="u", 
+            details=f"reserve room {room.room_number} for {counter} nights.")
+            try:
+                bill = Bill.objects.get(guest=guest)
+            except:
+                bill = Bill.objects.create(guest=guest)
+            
+            print(price)
+            bill.bill_item.add(b_i)
+            bill.total_price += price
+            bill.save()
+        else:
+            error = "no"
+
+        return JsonResponse({})
+
+    room = Room.objects.get(id=pk)
+    months = calender.Months
+    days = calender.Days
+    month = []
+    for m in months:
+        month.append(m[1])
+    day = []
+    for m in days:
+        day.append(m[1])
+    context = {'room':room, 'months': month, 'days': day}
+    return render(request, 'hotel/reserve_room.html', context)
+
+
+def add_room(request):
+    if request.method == 'POST'  and request.is_ajax():
+        text = request.POST
+        room_number = int(text['room_number'])
+        capacity = int(text['capacity'])
+        price = float(text['price'])
+        room = Room.objects.create(room_number=room_number, capacity=capacity, price=price)
+        room.save()
+        return JsonResponse({"text":text})
+    
+    return render(request, 'hotel/add_room.html')
+
+
+def all_rooms(request):
+    rooms = Room.objects.all()
+    context = {'rooms':rooms}
+    return render(request, 'hotel/all_rooms.html', context)
+
+
+def delete_room(request, pk):
+    room = Room.objects.get(id=pk)
+    reserve_items = reserve_item.objects.filter(room__pk=pk)
+    for o in reserve_items:
+        o.delete()
+    room.delete()
+    rooms = Room.objects.all()
+    context = {'rooms':rooms}
+    return render(request, 'hotel/all_rooms.html', context)
+
+
+def cancle_reserve_manager(request, pk):
+    item = reserve_item.objects.get(pk=pk)
+    reserve = item.Reserves.last()
+    price = item.total_price
+    room = item.room.room_number
+    guest = reserve.guest
+    item.delete()
+    reserve.save()
+    bi = Bill.objects.get(guest=guest)
+    for o in bi.bill_item.all():
+        if str(room) in o.details and o.cost == price:
+            o.cancle = "y"
+            o.save()
+            break
+    bi.total_price -= price
+    bi.save()
+
+    reserves = Reserves.objects.all()
+    context = {'reserves':reserves}
+    return redirect("all_reserves")
+
+
+def all_reserves(request):
+    if request.method == 'POST'  and request.is_ajax():
+        text = request.POST
+        username = text['username']
+        reserve = Reserves.objects.get(guest__user__username=username)
+        counter = 1
+        context = {}
+        for i in reserve.reserve_item.all():
+            if not i.leave:
+                y = " , ".join(f"{s.month}/{s.day}" for s in i.staying_time.all())
+                x = {'room':i.room.room_number, 'price':i.total_price, 'staying_time': y, 'pk': i.pk}
+                key = str(counter)
+                context[key] = x
+                counter += 1
+        return JsonResponse(context)
+
+    reserves = Reserves.objects.all()
+    context = {'reserves':reserves}
+    return render(request, 'hotel/all_reserves.html', context)
+
+
+def reckoning(request, pk):
+    item = reserve_item.objects.get(pk=pk)
+    item.leave = True
+    item.save()
+    reserve = item.Reserves.last()
+    price = item.total_price
+    room = item.room.room_number
+    guest = reserve.guest
+    bi = Bill.objects.get(guest=guest)
+    for o in bi.bill_item.all():
+        if str(room) in o.details and o.cost == price:
+            o.status = "p"
+            o.save()
+            break
+    bi.total_price -= price
+    bi.save()
+
+
+    reserves = Reserves.objects.all()
+    context = {'reserves':reserves}
+    return render(request, 'hotel/all_reserves.html', context)
+
 
 
 def service(request):
     return render(request, 'hotel/service.html')
-
-
-def request_installation(request):
-    req = list(Installation_request.objects.filter(guest__user=request.user))
-    context = {'req': req}
-    return render(request, 'hotel/request_installation.html', context)
-
-
-def manage_installation(request):
-    req = Installation_request.objects.all().order_by('request_date')
-    context = {'req': req}
-    return render(request, 'hotel/manage_installation.html', context)
-
-
-def create_request(request):
-    if request.method == 'POST':
-        description = request.POST['description']
-        request_date = timezone.now()
-        guests = list(Guest.objects.all())
-        guest = None
-        for guestObj in guests:
-            if (guestObj.user.username == request.user.username):
-                guest = guestObj
-        reserves = list(Reserves.objects.filter(guest__user=request.user))
-        roomNumber = None
-        for obj in reserves:
-            for obj2 in obj.reserve_item.all():
-                for obj3 in list(obj2.staying_time.all()):
-                    d1 = '{d.month}/{d.day}'.format(d=datetime.datetime.now())
-                    if (d1 == str(obj3)):
-                        roomNumber = obj2.room.room_number
-                        print(roomNumber)
-        if (roomNumber == None):
-            return render(request, 'hotel/failed_request.html')
-        results = None
-        cost = 0
-        installation_request = Installation_request(
-            description=description,
-            request_date=request_date,
-            guest=guest,
-            results=results,
-            roomNumber=roomNumber,
-            cost=cost
-        )
-        installation_request.save()
-    return render(request, 'hotel/create_request.html')
-
-
-def ins_req_result(request):
-
-    install_requests = list(Installation_request.objects.all())
-    objlist = []
-    if request.method == "POST":
-        for obj in install_requests:
-            if (str(request.POST.get('id')) == str(obj.id)):
-                objlist.append(obj)
-        context = {'req': objlist}
-        return render(request, 'hotel/ins_req_result.html', context)
-
-
-def update_result_ins(request):
-    objlist = []
-    install_requests = list(Installation_request.objects.all())
-    if request.method == "POST":
-        for obj in install_requests:
-            print(str(request.POST['id']))
-            print(str(obj.id))
-            if (str(request.POST.get('id')) == str(obj.id)):
-                obj.results = request.POST['description']
-                obj.cost = request.POST['cost']
-                objlist.append(obj)
-                obj.save()
-        context = {'req': objlist}
-    return render(request, 'hotel/ins_req_result.html', context)
-
-
-def request_housekeeping(request):
-    req = list(Housekeeping_request.objects.filter(guest__user=request.user))
-    context = {'req': req}
-    return render(request, 'hotel/request_housekeeping.html', context)
-
-
-def create_request_hk(request):
-    if request.method == 'POST':
-        description = request.POST['description']
-        request_date = timezone.now()
-        guests = list(Guest.objects.all())
-        guest = None
-        for guestObj in guests:
-            if (guestObj.user.username == request.user.username):
-                guest = guestObj
-        reserves = list(Reserves.objects.filter(guest__user=request.user))
-        roomNumber = None
-        for obj in reserves:
-            for obj2 in obj.reserve_item.all():
-                for obj3 in list(obj2.staying_time.all()):
-                    d1 = '{d.month}/{d.day}'.format(d=datetime.datetime.now())
-                    if (d1 == str(obj3)):
-                        roomNumber = obj2.room.room_number
-                        print(roomNumber)
-        if (roomNumber == None):
-            return render(request, 'hotel/failed_request.html')
-        results = None
-        cost = 0
-        Housekeeping_req = Housekeeping_request(
-            description=description,
-            request_date=request_date,
-            guest=guest,
-            results=results,
-            roomNumber=roomNumber,
-            cost=cost
-        )
-        Housekeeping_req.save()
-    return render(request, 'hotel/create_request.html')
-
-
-def manage_housekeeping(request):
-    req = Housekeeping_request.objects.all().order_by('request_date')
-    context = {'req': req}
-    return render(request, 'hotel/manage_housekeeping.html', context)
-
-
-def hk_req_result(request):
-    install_requests = list(Housekeeping_request.objects.all())
-    objlist = []
-    if request.method == "POST":
-        for obj in install_requests:
-            if (str(request.POST.get('id')) == str(obj.id)):
-                objlist.append(obj)
-        context = {'req': objlist}
-        return render(request, 'hotel/hk_req_result.html', context)
-
-
-def update_result_hk(request):
-    objlist = []
-    hk_requests = list(Housekeeping_request.objects.all())
-    if request.method == "POST":
-        for obj in hk_requests:
-            print(str(request.POST['id']))
-            print(str(obj.id))
-            if (str(request.POST.get('id')) == str(obj.id)):
-                obj.results = request.POST['description']
-                obj.cost = request.POST['cost']
-                objlist.append(obj)
-                obj.save()
-        context = {'req': objlist}
-    return render(request, 'hotel/hk_req_result.html', context)
-
-
-def service_food(request):
-    if (get_room_number(request) == None):
-        return render(request, 'hotel/no_room.html')
-
-    email = request.user.email
-    if request.method == "POST":
-        current = Order.objects.filter(email=email).get(status=0)
-        type = request.POST.get('type')
-        if (type == '0'):
-            name = request.POST.get('name')
-            price = int(request.POST.get('price'))
-            food_obj = Food.objects.get(name=name)
-            if (food_obj.quantity > 0):
-                food_obj.quantity -= 1
-                current.food_list += name + '#'
-                current.price += price
-                food_obj.save()
-        elif (type == '1'):
-            current.status = 1
-        else:
-            name = request.POST.get('name')
-            food_obj = Food.objects.get(name=name)
-            price = food_obj.price
-            food_obj.quantity += 1
-            current.price -= price
-            food_obj.save()
-
-            food_list = current.food_list.split('#')[:-1]
-            new_food_list = ""
-            flag = False
-            for food in food_list:
-                if (food == name and flag == False):
-                    flag = True
-                else:
-                    new_food_list += food + '#'
-            current.food_list = new_food_list
-        current.save()
-
-    current = Order.objects.filter(email=email).filter(status=0)
-    if (len(current) == 0):
-        mx = 1
-        if (len(Order.objects.filter()) > 0):
-            mx = Order.objects.latest('id')
-            mx = mx.id
-        current = Order(food_list="", price=0,
-                        email=email, status=0, id=mx + 1)
-        current.save()
-    else:
-        current = current[0]
-
-    food_list = current.food_list.split('#')[:-1]
-    foods = Food.objects.all
-    return render(request, 'hotel/service_food.html', {'foods': foods, 'food_list': food_list})
-
-
-def food_request(request):
-    if request.method == "POST":
-        type = request.POST.get('type')
-        id = request.POST.get('id')
-        order = Order.objects.get(id=id)
-        order.status = 2
-        order.save()
-    orders = Order.objects.filter(status=1).filter(~Q(price=0))
-    return render(request, 'hotel/food_request.html', {'orders': orders})
-
-
-def menu(request):
-    if request.method == "POST":
-        type = request.POST.get('type')
-        name = request.POST.get('name')
-        price = int(request.POST.get('price'))
-        quantity = int(request.POST.get('quantity'))
-        if (type == '0'):
-            food = Food.objects.filter(name=name).filter(
-                price=price).get(quantity=quantity)
-            food.delete()
-        else:
-            food = Food(name=name, price=int(price), quantity=int(quantity))
-            food.save()
-
-    foods = Food.objects.all
-    return render(request, 'hotel/menu.html', {'foods': foods})
-
-
-def internet(request):
-    if (get_room_number(request) == None):
-        return render(request, 'hotel/no_room.html')
-    email = request.user.email
-    account = InternetAccount.objects.filter(email=email)
-    if request.method == "POST":
-        password1 = request.POST.get('password1')
-        password2 = request.POST.get('password2')
-        if (password1 != "" and password1 == password2):
-            if (len(account) == 0):
-                account = InternetAccount(
-                    email=email, password=password1)
-            else:
-                account = account[0]
-                account.password = password1
-            account.save()
-
-    account = InternetAccount.objects.filter(email=email)
-    has = "1"
-    if (len(account) == 0):
-        account = None
-        has = "0"
-    else:
-        account = account[0]
-
-    return render(request, 'hotel/internet.html', {'account': account, 'has': has})

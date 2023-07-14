@@ -20,7 +20,7 @@
         <div class="container">
             <br>
             <br>
-            <a class="btn btn-danger" href="{% url 'home' %}">Home</a>
+            <a class="btn btn-warning" href="{% url 'home' %}">Home</a>
             <br>
             <br>
  
@@ -33,28 +33,43 @@
                   <th>Capacity</th>
                   <th>Reserve Dates</th>
                   <th>Total Price</th>
+                  <th>Cancle</th>
                 </tr>
               </thead>
               <tbody>
                   {% for obj in reserves %}
+                    {% for obj1 in obj.reserve_item.all %}
                     <tr>
-                        {% for obj1 in obj.reserve_item.all %}
-                            <td>{{obj1.room.room_number}}</td>
-                            <td>{{obj1.room.capacity}}</td>
-                            <td>
-                            <ul>
-                            {% for o in obj1.staying_time.all %}
-                                <li>{{o.month}}/{{o.day}}</li>
-                            {% endfor %}
-                            </ul>
-                            </td>
-                            <td>{{obj1.total_price}}</td>
+                        <td>{{obj1.room.room_number}}</td>
+                        <td>{{obj1.room.capacity}}</td>
+                        <td>
+                        <ul>
+                        {% for o in obj1.staying_time.all %}
+                            <li>{{o.month}}/{{o.day}}</li>
                         {% endfor %}
-                    </tr>
+                        </ul>
+                        </td>
+                        <td>{{obj1.total_price}}</td>
+                        <td>
+                          <form method="POST" id="form2" action="{% url 'my_reservations' %}">
+                            {% csrf_token %}
+                            <button type="submit" id="{{obj1.pk}}" class="btn btn-danger">Cancle</button>
+                          <a href="{% url 'cancle_reserve' %}"></a>
+                        </form>
+                        </td>
+                      </tr>
+                    {% endfor %}
                   {% endfor %}
               </tbody>
             </table>
           </div>
-
+          <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+          {% load static %}
+          <script>
+              var CSRF_TOKEN = '{{ csrf_token }}';
+              var URL = "{% url 'cancle_reserve' %}";
+          </script>
+          
+          <script src={% static 'cancle_reserve.js' %}></script>
 </body>
 </html>

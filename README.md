@@ -1,4 +1,4 @@
-**Hotel Management System**
+# Hotel Management System
 
 This project is a comprehensive Hotel Management System developed to streamline hotel operations and enhance guest experiences. 
 Utilizing the Django framework for the backend and JavaScript along with HTML for the frontend, the system delivers a robust and user-friendly web interface.
@@ -31,6 +31,4 @@ Utilizing the Django framework for the backend and JavaScript along with HTML fo
 - **Frontend:** JavaScript, HTML
 - **Database:** PostgreSQL
 
-By integrating these features into a cohesive system, the Hotel Management System enhances operational efficiency for hotels and provides a seamless experience for guests. 
-This project exemplifies the effective use of modern web technologies to address real-world needs in the hospitality industry.
 

@@ -3,7 +3,7 @@
 This project is a comprehensive Hotel Management System developed to streamline hotel operations and enhance guest experiences. 
 Utilizing the Django framework for the backend and JavaScript along with HTML for the frontend, the system delivers a robust and user-friendly web interface.
 
-**Key Features:**
+## Key Features:
 
 1. **Room Management:**
    - Hotels can efficiently manage their inventory by adding rooms, specifying availability, and setting prices.
@@ -25,7 +25,7 @@ Utilizing the Django framework for the backend and JavaScript along with HTML fo
    - PostgreSQL is utilized as the database backend, offering reliable and scalable data storage.
    - The database efficiently handles all aspects of hotel and guest data, ensuring data integrity and security.
 
-**Technologies Used:**
+## Technologies Used:
 
 - **Backend:** Django framework (Python)
 - **Frontend:** JavaScript, HTML

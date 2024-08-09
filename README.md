@@ -2,6 +2,7 @@
 
 This project is a comprehensive Hotel Management System developed to streamline hotel operations and enhance guest experiences. 
 Utilizing the Django framework for the backend and JavaScript along with HTML for the frontend, the system delivers a robust and user-friendly web interface.
+This is the implementation phase of our Fundamentals of Software Design course.
 
 ## Key Features:
 

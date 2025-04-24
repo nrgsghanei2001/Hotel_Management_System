@@ -19,7 +19,7 @@ This is the implementation phase of our Fundamentals of Software Design course.
    - Guests can request these services directly through the website, ensuring convenience and prompt service delivery.
 
 4. **Payment and Billing:**
-   - Secure online payment processing and billing features are integrated, allowing guests to settle payments effortlessly through the site.
+   - Online payment processing and billing features are integrated, allowing guests to settle payments effortlessly through the site.
    - The system supports various payment methods to cater to a wide range of user preferences.
 
 5. **Database Management:**

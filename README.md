@@ -1,7 +1,7 @@
 # Hotel Management System
 
-This project is a comprehensive Hotel Management System developed to streamline hotel operations and enhance guest experiences. 
-Utilizing the Django framework for the backend and JavaScript along with HTML for the frontend, the system delivers a robust and user-friendly web interface.
+This project is a Hotel Management System developed to simplify hotel operations and enhance guest experiences. 
+Utilizing the Django framework for the backend and JavaScript along with HTML for the frontend, the system delivers a user-friendly web interface.
 This is the implementation phase of our Fundamentals of Software Design course.
 
 ## Key Features:
@@ -23,7 +23,7 @@ This is the implementation phase of our Fundamentals of Software Design course.
    - The system supports various payment methods to cater to a wide range of user preferences.
 
 5. **Database Management:**
-   - PostgreSQL is utilized as the database backend, offering reliable and scalable data storage.
+   - PostgreSQL is utilized as the database backend, offering good data storage.
    - The database efficiently handles all aspects of hotel and guest data, ensuring data integrity and security.
 
 ## Technologies Used:
